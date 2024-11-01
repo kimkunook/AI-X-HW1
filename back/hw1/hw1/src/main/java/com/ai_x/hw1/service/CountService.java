@@ -18,16 +18,19 @@ public class CountService {
 
     /**
      * Count 값 변경 메서드
+     * 최초 데이터가 없으면 생성 후 진행, 기존 데이터가 있는 경우 변경
      * @param count 변경된 count 값
-     * @throws Exception 조회 과정에서 값이 비어있을 때 발생(원인 모를 오류)
      */
-    public void setCount(int count) throws Exception {
+    public void setCount(int count) {
         Optional<Count> byId = countRepository.findById(1);
-        if(byId.isPresent()){
+        if(byId.isEmpty()){
+            Count createCount = new Count();
+            createCount.setUid(1);
+            createCount.setCount(count);
+            countRepository.save(createCount);
+        }else{
             byId.get().setCount(count);
             countRepository.save(byId.get());
-        }else{
-            throw new Exception();
         }
     }
 

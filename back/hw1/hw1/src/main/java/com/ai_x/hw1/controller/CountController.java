@@ -32,7 +32,7 @@ public class CountController {
     }
 
     // Post /count
-    // 프론트의 
+    // 프론트의 count 값을 받아서 저장
     @PostMapping("/count")
     public ResponseEntity<?> setCount(@RequestBody UpdateCountDTO updateCountDTO) {
         try{

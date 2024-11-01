@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  java-backend:
+    build:
+      context: ./back/hw1/hw1
+      dockerfile: Dockerfile
+    container_name: JAVA
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+  maria:
+    image: mariadb:11.5.2
+    container_name: mariaDB
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      - TZ=Asia/Seoul
+      - MARIADB_ROOT_PASSWORD=0000
+      - MARIADB_USER=root
+      - MARIADB_DATABASE=hw1
+      - MARIADB_PASSWORD=0000
+    networks:
+      - app_network
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+  
+  react-app:
+    build: 
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: react
+    ports:
+      - "3000:3000"
+    depends_on:
+      - java-backend
+    networks:
+      - app_network
+    environment:
+      - REACT_APP_API_URL=http://java-backend:8080
+
+volumes:
+  mariadb_data:
+
+networks:
+  app_network:
+    driver: bridge

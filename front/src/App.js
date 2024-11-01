@@ -6,10 +6,10 @@ function App() {
   const [count, setCount] = useState(0)
   useEffect(()=>{
     console.log(count)
-    // axios.get("http://localhost:8080/count")
+    // axios.get("http://${REACT_APP_API_URL}/count")
     // .then((resp)=>{setCount(resp.data)})
     // .catch((error)=>{console.log(error)})
-    axios.post("http://localhost:8080/count", {count : count})
+    axios.post(`http://${process.env.REACT_APP_API_URL}/count`, {count : count})
     .catch((error)=>{console.log(error)})
   },[count])
   return (
